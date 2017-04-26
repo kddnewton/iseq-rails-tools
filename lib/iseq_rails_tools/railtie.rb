@@ -15,7 +15,7 @@ module IseqRailsTools
         end
 
       directories =
-        app.config.iseq_compile_paths.map { |path| [path, 'rb'] }.to_h
+        app.config.iseq_compile_paths.map { |path| [path.to_s, 'rb'] }.to_h
 
       reloader =
         app.config.file_watcher.new(files, directories) do
