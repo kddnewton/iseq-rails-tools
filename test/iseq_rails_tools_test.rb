@@ -1,4 +1,5 @@
 require 'test_helper'
+load File.expand_path('../lib/tasks/iseq_rails_tools_tasks.rake', __dir__)
 
 class IseqRailsTools::Test < ActionDispatch::IntegrationTest
   DIRECTORY = Rails.root.join(IseqRailsTools::Compiler::DIRECTORY_NAME)
@@ -17,7 +18,7 @@ class IseqRailsTools::Test < ActionDispatch::IntegrationTest
       app/models/foo.rb
     }.map { |filepath| IseqRailsTools.compiler.iseq_key_name(Rails.root.join(filepath).to_s) }
 
-    assert_equal expected_filepaths.sort, Dir.glob(DIRECTORY.join('*')).sort
+    assert_equal expected_filepaths.sort, compiled_iseq_files
   end
 
   test 'recompiles the foo.rb file when it changes' do
@@ -30,7 +31,18 @@ class IseqRailsTools::Test < ActionDispatch::IntegrationTest
     end
   end
 
+  test 'the iseq:clear task clears out the compiled files' do
+    get root_path
+
+    Rake::Task['iseq:clear'].execute
+    assert_empty compiled_iseq_files
+  end
+
   private
+
+  def compiled_iseq_files
+    Dir.glob(DIRECTORY.join('*')).sort
+  end
 
   def with_modified_foo
     filepath = Rails.root.join('app', 'models', 'foo.rb').to_s
