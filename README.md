@@ -1,6 +1,7 @@
 # IseqRailsTools
 
 [![Build Status](https://travis-ci.org/kddeisz/iseq-rails-tools.svg?branch=master)](https://travis-ci.org/kddeisz/iseq-rails-tools)
+[![Gem](https://img.shields.io/gem/v/iseq_rails_tools.svg)](https://rubygems.org/gems/iseq_rails_tools)
 
 Since Ruby 2.3, we've had the ability to dump out compiled Ruby bytecode to files to alleviate that process when ruby files are required. This can significantly boost boot times, especially when running with larger Ruby projects.
 
