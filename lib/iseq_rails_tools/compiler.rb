@@ -14,6 +14,15 @@ module IseqRailsTools
       Dir.glob(File.join(directory, '**/*.yarb')) { |path| FileUtils.rm(path) }
     end
 
+    def compile_all
+      globs.each do |glob|
+        Dir.glob(glob).each do |filepath|
+          iseq_key = iseq_key_name(filepath)
+          compile_and_store_iseq(filepath, iseq_key)
+        end
+      end
+    end
+
     def iseq_key_name(filepath)
       path = filepath.gsub("#{application.root.to_s}/", '')
                      .gsub(/[^A-Za-z0-9\._-]/) { |c| '%02x' % c.ord }

@@ -20,6 +20,10 @@ module IseqRailsTools
     def clear_compiled_iseq_files
       compiler.clear_compiled_iseq_files
     end
+
+    def compile_all
+      compiler.compile_all
+    end
   end
 
   self.compiler = NullCompiler.new
