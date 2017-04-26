@@ -4,6 +4,8 @@ Since Ruby 2.3, we've had the ability to dump out compiled Ruby bytecode to file
 
 This gem hooks into ActiveSupport's autoloading in development mode to bring AOT compiling to Rails. This can improve both the console and server boot times.
 
+When deploying to production, you can take advantage of the quicker boot times by adding the `iseq:all` rake task to your deploy script.
+
 ## Usage
 
 1. Add `iseq_rails_tools` to your `Gemfile`.
@@ -16,8 +18,8 @@ Then when running the console or the server, the compiled files will start to be
 
 IseqRailsTools adds a couple `Rake` tasks to your Rails project:
 
-1. iseq:all - will generate compiled iseq files for all autoloaded paths.
-2. iseq:clear - will clear out all compiled iseq files.
+1. iseq:all - Compile iseq files for all files under autoloaded paths
+2. iseq:clear - Clear out all compiled iseq files
 
 ## Contributing
 
