@@ -1,5 +1,7 @@
 # IseqRailsTools
 
+[![Build Status](https://travis-ci.org/kddeisz/iseq-rails-tools.svg?branch=master)](https://travis-ci.org/kddeisz/iseq-rails-tools)
+
 Since Ruby 2.3, we've had the ability to dump out compiled Ruby bytecode to files to alleviate that process when ruby files are required. This can significantly boost boot times, especially when running with larger Ruby projects.
 
 This gem hooks into ActiveSupport's autoloading in development mode to bring AOT compiling to Rails. This can improve both the console and server boot times.
