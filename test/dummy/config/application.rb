@@ -1,15 +1,14 @@
 require_relative 'boot'
 
-require 'rails/all'
+require 'active_model/railtie'
+require 'active_record/railtie'
+require 'action_controller/railtie'
+require 'rails/test_unit/railtie'
 
 Bundler.require(*Rails.groups)
-require "iseq_rails_tools"
+require 'iseq_rails_tools'
 
 module Dummy
   class Application < Rails::Application
-    # Settings in config/environments/* take precedence over those specified here.
-    # Application configuration should go into files in config/initializers
-    # -- all .rb files in that directory are automatically loaded.
   end
 end
-
