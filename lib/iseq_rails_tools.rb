@@ -30,7 +30,7 @@ end
 # Only actually hook into Rails when the environment isn't test so that tools
 # like simplecov will continue to function as expected. Also people do weird
 # stuff in test mode, so who knows.
-unless Rails.env.test?
+if !Rails.env.test? || IseqRailsTools.respond_to?(:internal?)
   require 'iseq_rails_tools/railtie'
 
   RubyVM::InstructionSequence.singleton_class.prepend(Module.new do
