@@ -2,6 +2,10 @@ require 'test_helper'
 load File.expand_path('../lib/tasks/iseq_rails_tools_tasks.rake', __dir__)
 
 class IseqRailsTools::Test < ActionDispatch::IntegrationTest
+  # Going with this for now because dealing with writing to the foo.rb file in
+  # the tests causes all kinds of problems with reloading.
+  i_suck_and_my_tests_are_order_dependent!
+
   DIRECTORY = Rails.root.join(IseqRailsTools::Compiler::DIRECTORY_NAME)
 
   teardown do
@@ -16,7 +20,11 @@ class IseqRailsTools::Test < ActionDispatch::IntegrationTest
       app/controllers/application_controller.rb
       app/controllers/foos_controller.rb
       app/models/foo.rb
-    }.map { |filepath| IseqRailsTools.compiler.iseq_key_name(Rails.root.join(filepath).to_s) }
+    }
+
+    expected_filepaths.map! do |filepath|
+      IseqRailsTools.compiler.iseq_key_name(Rails.root.join(filepath).to_s)
+    end
 
     assert_equal expected_filepaths.sort, compiled_iseq_files
   end
@@ -46,9 +54,11 @@ class IseqRailsTools::Test < ActionDispatch::IntegrationTest
 
   def with_modified_foo
     filepath = Rails.root.join('app', 'models', 'foo.rb').to_s
-    File.write(filepath, File.read(filepath).gsub('0', '1'))
+    content  = File.read(filepath)
+
+    File.write(filepath, content.gsub('0', '1'))
     yield
   ensure
-    File.write(filepath, File.read(filepath).gsub('1', '0'))
+    File.write(filepath, content)
   end
 end

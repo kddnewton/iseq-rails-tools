@@ -5,6 +5,8 @@ module IseqRailsTools
     initializer 'iseq_rails_tools.initialize' do |app|
       IseqRailsTools.compiler = Compiler.new(app)
 
+      # Yeah, sorry about this. This was the easiest way to get all access to
+      # all of the reloadable paths.
       app.config.iseq_compile_paths = app.send(:_all_autoload_paths)
 
       files =
@@ -17,7 +19,8 @@ module IseqRailsTools
 
       reloader =
         app.config.file_watcher.new(files, directories) do
-          IseqRailsTools.compiler.recompile_necessary
+          Rails.logger.debug('[IseqRailsTools] Compiling files')
+          IseqRailsTools.compiler.recompile_modified
         end
 
       app.reloaders.unshift(reloader)

@@ -31,7 +31,7 @@ module IseqRailsTools
       end
     end
 
-    def recompile_necessary
+    def recompile_modified
       globs.each do |glob|
         Dir.glob(glob).each do |filepath|
           iseq_key = iseq_key_name(filepath)
