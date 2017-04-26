@@ -1,4 +1,4 @@
-# ISeqRailsTools
+# IseqRailsTools
 
 
 ## Usage
