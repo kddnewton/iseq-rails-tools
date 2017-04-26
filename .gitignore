@@ -2,6 +2,5 @@
 log/*.log
 pkg/
 
-test/dummy/.yomikomu/
+test/dummy/.iseq/
 test/dummy/log/*.log
-test/dummy/log/*.sqlite3

@@ -1,15 +1,23 @@
 module IseqRailsTools
   class Compiler
+    DIRECTORY_NAME = '.iseq'
+
     attr_reader :application, :directory
 
     def initialize(application)
       @application = application
-      @directory   = application.root.join('.yomikomu').to_s
+      @directory   = application.root.join(DIRECTORY_NAME).to_s
       FileUtils.mkdir_p(directory) unless File.directory?(directory)
     end
 
     def clear_compiled_iseq_files
       Dir.glob(File.join(directory, '**/*.yarb')) { |path| FileUtils.rm(path) }
+    end
+
+    def iseq_key_name(filepath)
+      path = filepath.gsub("#{application.root.to_s}/", '')
+                     .gsub(/[^A-Za-z0-9\._-]/) { |c| '%02x' % c.ord }
+      File.join(directory, "#{path}.yarb")
     end
 
     def load_iseq(filepath)
@@ -65,12 +73,6 @@ module IseqRailsTools
         application.config.iseq_compile_paths.map do |directory|
           File.join(directory, '**/*.rb')
         end
-    end
-
-    def iseq_key_name(filepath)
-      path = filepath.gsub(application.root.to_s, '')
-                     .gsub(/[^A-Za-z0-9\._-]/) { |c| '%02x' % c.ord }
-      File.join(directory, "#{path}.yarb")
     end
   end
 end
