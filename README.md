@@ -18,10 +18,10 @@ Then when running the console or the server, the compiled files will start to be
 
 ## Tasks
 
-IseqRailsTools adds a couple `Rake` tasks to your Rails project:
+`IseqRailsTools` adds a couple `Rake` tasks to your Rails project:
 
-1. iseq:all - Compile iseq files for all files under autoloaded paths
-2. iseq:clear - Clear out all compiled iseq files
+1. `iseq:all` - Compile iseq files for all files under autoloaded paths
+2. `iseq:clear` - Clear out all compiled iseq files
 
 ## Contributing
 
