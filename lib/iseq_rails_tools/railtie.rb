@@ -7,8 +7,8 @@ module IseqRailsTools
       # all of the reloadable paths.
       paths = app.send(:_all_autoload_paths)
 
-      IseqRailsTools.compiler =
-        Compiler.new(root: "#{app.root}/", paths: paths)
+      IseqRailsTools.watcher =
+        PathsWatcher.new(root: "#{app.root}/", paths: paths)
 
       files = paths.flat_map { |path| Dir.glob(File.join(path, '**/*.rb')) }
       directories = paths.map { |path| [path.to_s, 'rb'] }.to_h
@@ -16,7 +16,7 @@ module IseqRailsTools
       reloader =
         app.config.file_watcher.new(files, directories) do
           Rails.logger.debug('[IseqRailsTools] Compiling files')
-          IseqRailsTools.compiler.recompile_modified
+          IseqRailsTools.watcher.recompile_modified
         end
 
       app.reloaders.unshift(reloader)

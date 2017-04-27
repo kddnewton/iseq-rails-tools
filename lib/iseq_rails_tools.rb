@@ -1,20 +1,14 @@
 require 'digest/sha1'
 require 'fileutils'
 
-require 'iseq_rails_tools/compiler'
+require 'iseq_rails_tools/watcher'
 require 'iseq_rails_tools/watched_file'
 
 module IseqRailsTools
-  class NullCompiler
-    def watching?(filepath)
-      false
-    end
-  end
-
   class << self
-    attr_accessor :compiler
+    attr_accessor :watcher
   end
-  self.compiler = NullCompiler.new
+  self.watcher = NullWatcher.new
 end
 
 # Only actually hook into Rails when the environment isn't test so that tools
@@ -25,8 +19,8 @@ if !Rails.env.test? || IseqRailsTools.respond_to?(:internal?)
 
   RubyVM::InstructionSequence.singleton_class.prepend(Module.new do
     def load_iseq(filepath)
-      if ::IseqRailsTools.compiler.watching?(filepath)
-        ::IseqRailsTools.compiler.load(filepath)
+      if ::IseqRailsTools.watcher.watching?(filepath)
+        ::IseqRailsTools.watcher.load(filepath)
       elsif method(:load_iseq).super_method
         super
       end

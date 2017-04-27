@@ -1,7 +1,13 @@
 module IseqRailsTools
   DIRECTORY_NAME = '.iseq'
 
-  class Compiler
+  class NullWatcher
+    def watching?(filepath)
+      false
+    end
+  end
+
+  class PathsWatcher
     attr_reader :dir, :paths, :root
 
     def initialize(paths:, root:)
