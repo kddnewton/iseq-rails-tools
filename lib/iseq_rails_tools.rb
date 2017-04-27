@@ -1,45 +1,37 @@
-require 'digest/sha1'
-require 'fileutils'
-require 'iseq_rails_tools/compiler'
-
-module IseqRailsTools
-  class NullCompiler
-    def clear_compiled_iseq_files
-    end
-
-    def watching?(filepath)
-      false
-    end
-  end
-
-  class << self
-    attr_accessor :compiler
-
-    def clear_compiled_iseq_files
-      compiler.clear_compiled_iseq_files
-    end
-
-    def compile_all
-      compiler.compile_all
-    end
-  end
-
-  self.compiler = NullCompiler.new
-end
-
 # Only actually hook into Rails when the environment isn't test so that tools
 # like simplecov will continue to function as expected. Also people do weird
 # stuff in test mode, so who knows.
 if !Rails.env.test? || IseqRailsTools.respond_to?(:internal?)
   require 'iseq_rails_tools/railtie'
+  require 'iseq_rails_tools/source_file'
+
+  module IseqRailsTools
+    DIRECTORY_NAME = '.iseq'
+
+    class << self
+      attr_accessor :iseq_dir
+
+      def clear
+        Dir.glob(File.join(iseq_dir, '**/*.yarb')) { |path| File.delete(path) }
+      end
+    end
+
+    root =
+      caller_locations.detect do |location|
+        path = location.absolute_path || location.path
+        if path != __FILE__ && path !~ %r{bundler[\w.-]*/lib/bundler}
+          break File.dirname(path)
+        end
+      end
+    root = File.dirname(root) until File.exist?("#{root}/config.ru")
+
+    self.iseq_dir = File.join(root, DIRECTORY_NAME)
+    FileUtils.mkdir_p(iseq_dir) unless File.directory?(iseq_dir)
+  end
 
   RubyVM::InstructionSequence.singleton_class.prepend(Module.new do
     def load_iseq(filepath)
-      if ::IseqRailsTools.compiler.watching?(filepath)
-        ::IseqRailsTools.compiler.load_iseq(filepath)
-      elsif method(:load_iseq).super_method
-        super
-      end
+      ::IseqRailsTools::SourceFile.load(filepath)
     end
   end)
 end
