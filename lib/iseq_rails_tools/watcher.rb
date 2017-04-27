@@ -1,3 +1,5 @@
+require 'fileutils'
+
 module IseqRailsTools
   DIRECTORY_NAME = '.iseq'
 

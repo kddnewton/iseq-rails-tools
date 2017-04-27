@@ -1,3 +1,5 @@
+require 'digest/sha1'
+
 module IseqRailsTools
   class WatchedFile
     attr_reader :source_path, :iseq_path
