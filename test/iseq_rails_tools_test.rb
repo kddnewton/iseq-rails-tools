@@ -5,15 +5,17 @@ class IseqRailsTools::Test < ActionDispatch::IntegrationTest
     app2fcontrollers2fapplication_controller.rb.yarb
     app2fcontrollers2ffoos_controller.rb.yarb
     app2fmodels2ffoo.rb.yarb
-    app2fmodels2fbar.rb.yarb
   }
 
-  teardown { IseqRailsTools.watcher.clear }
+  teardown { IseqRailsTools.clear }
 
   test 'generates compiled versions for autoloaded files' do
     get root_path
     assert_equal '0', response.body
-    assert_equal EXPECTED[0..2], compiled_files
+
+    EXPECTED.each do |expected|
+      refute_nil compiled_files.detect { |compiled_file| compiled_file.include?(expected) }
+    end
   end
 
   test 'recompiles the foo.rb file when it changes' do
