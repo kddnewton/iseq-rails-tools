@@ -2,5 +2,8 @@
 log/*.log
 pkg/
 
+tmp/
+lib/iseq_rails_tools/iseq_rails_tools.bundle
+
 test/dummy/.iseq/
 test/dummy/log/*.log

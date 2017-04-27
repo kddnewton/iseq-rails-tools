@@ -33,7 +33,7 @@ module IseqRailsTools
     end
 
     def self.load(source_path)
-      iseq_path = source_path.gsub(/[^A-Za-z0-9\._-]/) { |c| '%02x' % c.ord }
+      iseq_path = IseqRailsTools.iseq_path_for(source_path)
       iseq_path = File.join(IseqRailsTools.iseq_dir, "#{iseq_path}.yarb")
       new(source_path, iseq_path).load
     end
