@@ -18,11 +18,7 @@ if !Rails.env.test? || IseqRailsTools.respond_to?(:internal?)
 
   RubyVM::InstructionSequence.singleton_class.prepend(Module.new do
     def load_iseq(filepath)
-      if ::IseqRailsTools.watcher
-        ::IseqRailsTools.watcher.load(filepath)
-      elsif method(:load_iseq).super_method
-        super
-      end
+      ::IseqRailsTools.watcher&.load(filepath)
     end
   end)
 end
