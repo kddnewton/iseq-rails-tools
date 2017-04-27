@@ -1,7 +1,7 @@
 require 'digest/sha1'
 
 module IseqRailsTools
-  class WatchedFile
+  class SourceFile
     attr_reader :source_path, :iseq_path
 
     def initialize(source_path, iseq_path)
@@ -10,7 +10,10 @@ module IseqRailsTools
     end
 
     def dump
-      Rails.logger.debug("[IseqRailsTools] Compiling #{source_path}")
+      # Lonely operator necessary here because Rails.logger might not be
+      # initialized yet
+      Rails.logger&.debug("[IseqRailsTools] Compiling #{source_path}")
+
       iseq   = RubyVM::InstructionSequence.compile_file(source_path)
       digest = ::Digest::SHA1.file(source_path).digest
       File.binwrite(iseq_path, iseq.to_binary("SHA-1:#{digest}"))
@@ -27,6 +30,12 @@ module IseqRailsTools
       else
         dump
       end
+    end
+
+    def self.load(source_path)
+      iseq_path = source_path.gsub(/[^A-Za-z0-9\._-]/) { |c| '%02x' % c.ord }
+      iseq_path = File.join(IseqRailsTools.iseq_dir, "#{iseq_path}.yarb")
+      new(source_path, iseq_path).load
     end
 
     private

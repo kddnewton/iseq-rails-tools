@@ -39,11 +39,6 @@ class IseqRailsTools::Test < ActionDispatch::IntegrationTest
     end
   end
 
-  test 'PathsWatcher#dump_all compiles all' do
-    IseqRailsTools.watcher.dump_all
-    assert_equal EXPECTED.sort, compiled_files
-  end
-
   private
 
   def compiled_files
