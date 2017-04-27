@@ -6,10 +6,10 @@ class IseqRailsTools::Test < ActionDispatch::IntegrationTest
   # the tests causes all kinds of problems with reloading.
   i_suck_and_my_tests_are_order_dependent!
 
-  DIRECTORY = Rails.root.join(IseqRailsTools::Compiler::DIRECTORY_NAME)
+  DIRECTORY = Rails.root.join(IseqRailsTools::DIRECTORY_NAME)
 
   teardown do
-    Dir.glob(DIRECTORY.join('*')).each { |filepath| File.unlink(filepath) }
+    Dir.glob(DIRECTORY.join('*')).each { |filepath| File.delete(filepath) }
   end
 
   test 'generates compiled versions for autoloaded files' do
@@ -17,16 +17,15 @@ class IseqRailsTools::Test < ActionDispatch::IntegrationTest
     assert_equal '0', response.body
 
     expected_filepaths = %w{
-      app/controllers/application_controller.rb
-      app/controllers/foos_controller.rb
-      app/models/foo.rb
+      app2fcontrollers2fapplication_controller.rb.yarb
+      app2fcontrollers2ffoos_controller.rb.yarb
+      app2fmodels2ffoo.rb.yarb
     }
 
-    expected_filepaths.map! do |filepath|
-      IseqRailsTools.compiler.iseq_key_name(Rails.root.join(filepath).to_s)
-    end
+    actual_filepaths =
+      compiled_iseq_files.map { |filepath| File.basename(filepath) }
 
-    assert_equal expected_filepaths.sort, compiled_iseq_files
+    assert_equal expected_filepaths.sort, actual_filepaths
   end
 
   test 'recompiles the foo.rb file when it changes' do

@@ -3,19 +3,15 @@ module IseqRailsTools
     config.iseq_compile_paths = []
 
     initializer 'iseq_rails_tools.initialize' do |app|
-      IseqRailsTools.compiler = Compiler.new(app)
-
       # Yeah, sorry about this. This was the easiest way to get all access to
       # all of the reloadable paths.
-      app.config.iseq_compile_paths = app.send(:_all_autoload_paths)
+      paths = app.send(:_all_autoload_paths)
 
-      files =
-        app.config.iseq_compile_paths.flat_map do |path|
-          Dir.glob(File.join(path, '**/*.rb'))
-        end
+      IseqRailsTools.compiler =
+        Compiler.new(root: "#{app.root}/", paths: paths)
 
-      directories =
-        app.config.iseq_compile_paths.map { |path| [path.to_s, 'rb'] }.to_h
+      files = paths.flat_map { |path| Dir.glob(File.join(path, '**/*.rb')) }
+      directories = paths.map { |path| [path.to_s, 'rb'] }.to_h
 
       reloader =
         app.config.file_watcher.new(files, directories) do
