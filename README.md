@@ -5,8 +5,6 @@
 
 Since Ruby 2.3, we've had the ability to dump out compiled Ruby bytecode to files to alleviate that process when ruby files are required. This can significantly boost boot times, especially when running with larger Ruby projects.
 
-This gem hooks into ActiveSupport's autoloading in development mode to bring AOT compiling to Rails. This can improve both the console and server boot times.
-
 When deploying to production, you can take advantage of the quicker boot times by adding the `iseq:all` rake task to your deploy script. A simple way to do this is to make `iseq:all` a prerequisite of `assets:precompile`, like so: `Rake::Task['assets:precompile'].enhance(['iseq:all'])`.
 
 ## Usage
