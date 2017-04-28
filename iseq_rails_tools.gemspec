@@ -15,7 +15,8 @@ Gem::Specification.new do |s|
   DESC
 
   s.license     = 'MIT'
-  s.files = Dir['{app,config,db,lib}/**/*', 'MIT-LICENSE', 'Rakefile', 'README.md']
+  s.files       = Dir['{ext,lib}/**/*', 'MIT-LICENSE', 'Rakefile', 'README.md']
+  s.extensions  = ['ext/iseq_rails_tools/extconf.rb']
 
   s.required_ruby_version = '>= 2.3.0'
   s.add_dependency 'rails', '>= 5.0.0'
