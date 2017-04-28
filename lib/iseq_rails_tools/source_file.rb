@@ -34,7 +34,7 @@ module IseqRailsTools
 
     def self.load(source_path)
       iseq_path = IseqRailsTools.iseq_path_for(source_path)
-      iseq_path = File.join(IseqRailsTools.iseq_dir, "#{iseq_path}.yarb")
+      iseq_path = File.join(IseqRailsTools.iseq_dir, iseq_path)
       new(source_path, iseq_path).load
     end
 

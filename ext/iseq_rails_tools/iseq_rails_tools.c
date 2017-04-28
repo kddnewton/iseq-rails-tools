@@ -11,25 +11,22 @@ static int whitelisted(char ch)
 static VALUE iseq_path_for(VALUE self, VALUE ruby_source_path)
 { 
   char *source_path = rb_string_value_cstr(&ruby_source_path);
-  char iseq_path[strlen(source_path) * 2 + 1];
+  char iseq_path[strlen(source_path) * 2 + 6];
 
   int source_idx = 0;
   int iseq_idx = 0;
 
   while(source_path[source_idx] != '\0') {
     if (whitelisted(source_path[source_idx])) {
-      memcpy(iseq_path + iseq_idx, source_path + source_idx, 1);
-      source_idx++;
-      iseq_idx++;
+      memcpy(iseq_path + iseq_idx++, source_path + source_idx++, 1);
     } else {
-      sprintf(iseq_path + iseq_idx, "%02x", source_path[source_idx]);
-      source_idx++;
+      sprintf(iseq_path + iseq_idx, "%02x", source_path[source_idx++]);
       iseq_idx += 2;
     }
   }
-  iseq_path[iseq_idx] = '\0';
 
-  return rb_str_new(iseq_path, iseq_idx);
+  memcpy(iseq_path + iseq_idx, ".yarb", 5);
+  return rb_str_new(iseq_path, iseq_idx + 5);
 }
 
 void Init_iseq_rails_tools()
