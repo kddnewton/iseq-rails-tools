@@ -1,3 +1,6 @@
+module IseqRailsTools
+end
+
 # Only actually hook into Rails when the environment isn't test so that tools
 # like simplecov will continue to function as expected. Also people do weird
 # stuff in test mode, so who knows.

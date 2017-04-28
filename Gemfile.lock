@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    iseq_rails_tools (0.0.4)
+    iseq_rails_tools (0.0.5)
       rails (>= 5.0.0)
 
 GEM
