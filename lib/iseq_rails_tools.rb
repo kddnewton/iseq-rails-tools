@@ -28,7 +28,7 @@ if !Rails.env.test? || IseqRailsTools.respond_to?(:internal?)
         end
       end
 
-    if !File.exist?("#{root}/config.ru") && root != File.dirname(root)
+    while !File.exist?("#{root}/config.ru") && root != File.dirname(root)
       root = File.dirname(root)
     end
 

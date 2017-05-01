@@ -19,6 +19,6 @@ Gem::Specification.new do |s|
   s.extensions  = ['ext/iseq_rails_tools/extconf.rb']
 
   s.required_ruby_version = '>= 2.3.0'
-  s.add_dependency 'rails', '>= 5.0.0'
+  s.add_dependency 'rails', '>= 4.0'
   s.add_development_dependency 'rake-compiler', '~> 0.9'
 end
