@@ -5,7 +5,14 @@ end
 # like simplecov will continue to function as expected. Also people do weird
 # stuff in test mode, so who knows.
 if !Rails.env.test? || IseqRailsTools.respond_to?(:internal?)
-  require 'iseq_rails_tools/iseq_rails_tools'
+  begin
+    # Extension target
+    require 'iseq_rails_tools/iseq_rails_tools'
+  rescue LoadError
+    # Pure ruby fallback, in case installation failed
+    require 'iseq_rails_tools/extension_fallback'
+  end
+
   require 'iseq_rails_tools/railtie'
   require 'iseq_rails_tools/source_file'
 
